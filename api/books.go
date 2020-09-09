@@ -1,86 +1,75 @@
-package main
+package api
 
 import (
     "net/http"
     "encoding/json"
     "strconv"
     "github.com/gorilla/mux"
+	"golang_api/lib"
+	"golang_api/db"
+	// db "golang_api/db/mocked_db"
 )
 
-// Book Struct
-type Book struct {
-	ID     int     `json:"id"`
-	Isbn   string  `json:"isbn"`
-	Title  string  `json:"title"`
-	Author *Author `json:"author"`
-}
-
-// Author Struct
-type Author struct {
-	FirstName string `json:"firstname"`
-	LastName  string `json:"lastname"`
-}
-
 // Give all the books
-func getBooks(w http.ResponseWriter, r *http.Request) {
+func GetBooks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(get_all_books())
+	json.NewEncoder(w).Encode(db.GetAllBooks())
 }
 
 // Give a book with some ID
-func getBook(w http.ResponseWriter, r *http.Request) {
+func GetBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 
     index, err := strconv.Atoi(vars["id"])
     if err == nil {
-        json.NewEncoder(w).Encode(get_book(index))
+        json.NewEncoder(w).Encode(db.GetBook(index))
         return
     }
 
-	json.NewEncoder(w).Encode(&Book{})
+	json.NewEncoder(w).Encode(&lib.Book{})
 }
 
 // Adds a new Book
-func addBook(w http.ResponseWriter, r *http.Request) {
+func AddBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var book Book
+	var book lib.Book
 	_ = json.NewDecoder(r.Body).Decode(&book)
 
-    book = insert_book(book)
+    book = db.InsertBook(book)
 	json.NewEncoder(w).Encode(book)
 }
 
 // Updates a book with some ID
-func updateBook(w http.ResponseWriter, r *http.Request) {
+func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 
-	var tempBook Book
+	var tempBook lib.Book
     _ = json.NewDecoder(r.Body).Decode(&tempBook)
 
     index, err := strconv.Atoi(vars["id"])
     if err == nil {
         tempBook.ID = index
-        update_book(tempBook)
+        db.UpdateBook(tempBook)
         return
     }
 
-	json.NewEncoder(w).Encode(&Book{})
+	json.NewEncoder(w).Encode(&lib.Book{})
 }
 
 // Deletes the book with some ID
-func deleteBook(w http.ResponseWriter, r *http.Request) {
+func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(r)
 
     index, err := strconv.Atoi(vars["id"])
     if err == nil {
-        delete_book(index)
+        db.DeleteBook(index)
         return
     }
 
-	json.NewEncoder(w).Encode(&Book{})
+	json.NewEncoder(w).Encode(&lib.Book{})
 }

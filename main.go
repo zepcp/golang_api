@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/mux"
+	"golang_api/api"
 )
 
 // Home screen
@@ -24,11 +25,11 @@ func main() {
 	router.HandleFunc("/healthCheck", healthCheck)
 
 	// Handling the endpoints
-	router.HandleFunc("/api/books", getBooks).Methods("GET")
-	router.HandleFunc("/api/books/{id}", getBook).Methods("GET")
-	router.HandleFunc("/api/books", addBook).Methods("POST")
-	router.HandleFunc("/api/books/{id}", updateBook).Methods("PUT")
-	router.HandleFunc("/api/books/{id}", deleteBook).Methods("DELETE")
+	router.HandleFunc("/api/books", api.GetBooks).Methods("GET")
+	router.HandleFunc("/api/books/{id}", api.GetBook).Methods("GET")
+	router.HandleFunc("/api/books", api.AddBook).Methods("POST")
+	router.HandleFunc("/api/books/{id}", api.UpdateBook).Methods("PUT")
+	router.HandleFunc("/api/books/{id}", api.DeleteBook).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }

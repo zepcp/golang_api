@@ -7,13 +7,14 @@ CREATE TABLE book (
     ts timestamp without time zone default (now() at time zone 'utc')
 );
 */
-package main
+package db
 
 import (
     "database/sql"
     "encoding/json"
     "fmt"
     _ "github.com/lib/pq"
+	"golang_api/lib"
 )
 
 const (
@@ -44,14 +45,14 @@ func connect() *sql.DB{
     return db
 }
 
-func get_all_books() []Book{
+func GetAllBooks() []lib.Book{
     db := connect()
     rows, e := db.Query(`SELECT id, isbn, title, author->>'firstname', author->>'lastname' FROM book`)
     CheckError(e)
 
-    var book Book
-    var author Author
-    var books []Book
+    var book lib.Book
+    var author lib.Author
+    var books []lib.Book
 
     for rows.Next() {
         rows.Scan(&book.ID, &book.Isbn, &book.Title, &author.FirstName, &author.LastName)
@@ -66,13 +67,13 @@ func get_all_books() []Book{
     return books
 }
 
-func get_book(id int) Book{
+func GetBook(id int) lib.Book{
     fmt.Println(id)
     db := connect()
     row := db.QueryRow(`SELECT id, isbn, title, author->>'firstname', author->>'lastname' FROM book WHERE id=$1`, id)
 
-    var book Book
-    var author Author
+    var book lib.Book
+    var author lib.Author
     row.Scan(&book.ID, &book.Isbn, &book.Title, &author.FirstName, &author.LastName)
     book.Author = &author
 
@@ -82,7 +83,7 @@ func get_book(id int) Book{
     return book
 }
 
-func insert_book(book Book) Book {
+func InsertBook(book lib.Book) lib.Book {
     db := connect()
     insertDynStmt := `INSERT INTO book(isbn, title, author) VALUES($1, $2, $3)`
     author, _ := json.Marshal(book.Author)
@@ -95,7 +96,7 @@ func insert_book(book Book) Book {
     return book
 }
 
-func update_book(tempBook Book) Book {
+func UpdateBook(tempBook lib.Book) lib.Book {
     db := connect()
     updateStmt := `UPDATE book SET isbn=$1, title=$2, author=$3 WHERE id=$4`
     author, _ := json.Marshal(tempBook.Author)
@@ -108,7 +109,7 @@ func update_book(tempBook Book) Book {
     return tempBook
 }
 
-func delete_book(id int) {
+func DeleteBook(id int) {
     db := connect()
     deleteStmt := `DELETE FROM book WHERE id=$1`
     _, e := db.Exec(deleteStmt, id)
