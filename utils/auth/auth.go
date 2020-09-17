@@ -10,26 +10,25 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-//Exception struct
+//Exception type - struct
 type Exception models.Exception
 
-// JwtVerify Middleware function
+// JwtVerify func - Middleware
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		var header = r.Header.Get("x-access-token") //Grab the token from the header
+		var accessToken = r.Header.Get("x-access-token")
 
-		header = strings.TrimSpace(header)
+		accessToken = strings.TrimSpace(accessToken)
 
-		if header == "" {
-			//Token is missing, returns with error code 403 Unauthorized
+		if accessToken == "" {
 			w.WriteHeader(http.StatusForbidden)
 			json.NewEncoder(w).Encode(Exception{Message: "Missing auth token"})
 			return
 		}
 		tk := &models.Token{}
 
-		_, err := jwt.ParseWithClaims(header, tk, func(token *jwt.Token) (interface{}, error) {
+		_, err := jwt.ParseWithClaims(accessToken, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil
 		})
 

@@ -9,11 +9,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// FetchBooks func
 func FetchBooks(w http.ResponseWriter, r *http.Request) {
 	var books []models.Book
 	json.NewEncoder(w).Encode(books)
 }
 
+// UpdateBook func
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	book := &models.Book{}
 	params := mux.Vars(r)
@@ -24,6 +26,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&book)
 }
 
+// DeleteBook func
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var id = params["id"]
@@ -33,6 +36,7 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Book deleted")
 }
 
+// GetBook func
 func GetBook(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var id = params["id"]
@@ -41,6 +45,7 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&book)
 }
 
+// AddBook func
 func AddBook(w http.ResponseWriter, r *http.Request) {
 
 	book := &models.Book{}

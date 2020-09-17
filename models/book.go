@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// Book struct
 type Book struct {
 	gorm.Model
 

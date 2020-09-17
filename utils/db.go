@@ -11,10 +11,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-//ConnectDB function: Make database connection
+//ConnectDB func
 func ConnectDB() *gorm.DB {
-
-	//Load environmenatal variables
+	//Load env variables
 	err := godotenv.Load()
 
 	if err != nil {
@@ -26,10 +25,9 @@ func ConnectDB() *gorm.DB {
 	databaseName := os.Getenv("databaseName")
 	databaseHost := os.Getenv("databaseHost")
 
-	//Define DB connection string
 	dbURI := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", databaseHost, username, databaseName, password)
 
-	//connect to db URI
+	//connect to dbURI
 	db, err := gorm.Open("postgres", dbURI)
 
 	if err != nil {
@@ -37,7 +35,7 @@ func ConnectDB() *gorm.DB {
 		panic(err)
 	}
 
-	// Migrate the schema
+	// Migrate schema
 	db.AutoMigrate(
 		&models.User{},
 		&models.Book{},

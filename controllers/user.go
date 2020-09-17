@@ -12,6 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login func
 func Login(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
@@ -24,6 +25,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// FindOne func
 func FindOne(email, password string) map[string]interface{} {
 	user := &models.User{}
 
@@ -61,6 +63,7 @@ func FindOne(email, password string) map[string]interface{} {
 	return resp
 }
 
+// AddUser func
 func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{}
@@ -86,11 +89,13 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(addedUser)
 }
 
+// FetchUsers func
 func FetchUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	json.NewEncoder(w).Encode(users)
 }
 
+// UpdateUser func
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	params := mux.Vars(r)
@@ -101,6 +106,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&user)
 }
 
+// DeleteUser func
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var id = params["id"]
@@ -110,6 +116,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("User deleted")
 }
 
+// GetUser func
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var id = params["id"]
