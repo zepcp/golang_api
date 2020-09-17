@@ -1,35 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"auth/routes"
 	"log"
 	"net/http"
-	"github.com/gorilla/mux"
-	"golang_api/api"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
-// Home screen
-func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Congrats. Run Successfully!</h1>")
-}
-
-// Check if system is up and running
-func healthCheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Alive!</h1>")
-}
-
 func main() {
-	router := mux.NewRouter().StrictSlash(true)
+	err := godotenv.Load()
 
-	router.HandleFunc("/", home)
-	router.HandleFunc("/healthCheck", healthCheck)
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	// Handling the endpoints
-	router.HandleFunc("/api/books", api.GetBooks).Methods("GET")
-	router.HandleFunc("/api/books/{id}", api.GetBook).Methods("GET")
-	router.HandleFunc("/api/books", api.AddBook).Methods("POST")
-	router.HandleFunc("/api/books/{id}", api.UpdateBook).Methods("PUT")
-	router.HandleFunc("/api/books/{id}", api.DeleteBook).Methods("DELETE")
+	// Handle routes
+	http.Handle("/", routes.Handlers())
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	// serve
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }

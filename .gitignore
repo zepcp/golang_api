@@ -1,3 +1,4 @@
+.env
+.DS_Store
 .idea
 go.sum
-golang_api
