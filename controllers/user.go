@@ -70,7 +70,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		err := ErrorResponse{
-			Err: "Password Encryption  failed",
+			Err: "Password Encryption failed",
 		}
 		json.NewEncoder(w).Encode(err)
 	}

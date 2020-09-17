@@ -20,5 +20,5 @@ func main() {
 	http.Handle("/", routes.Handlers())
 
 	// serve
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("apiPort"), nil))
 }
