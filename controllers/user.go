@@ -61,7 +61,6 @@ func FindOne(email, password string) map[string]interface{} {
 	return resp
 }
 
-//AddUser function -- add a new user
 func AddUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{}
@@ -89,8 +88,6 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 
 func FetchUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
-	db.Preload("auths").Find(&users)
-
 	json.NewEncoder(w).Encode(users)
 }
 

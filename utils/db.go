@@ -36,8 +36,6 @@ func ConnectDB() *gorm.DB {
 		fmt.Println("error", err)
 		panic(err)
 	}
-	// close db when not in use
-	// defer db.Close()
 
 	// Migrate the schema
 	db.AutoMigrate(
@@ -45,6 +43,5 @@ func ConnectDB() *gorm.DB {
 		&models.Book{},
 	)
 
-	fmt.Println("Successfully connected!", db)
 	return db
 }

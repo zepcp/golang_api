@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Handlers for each endpoint
 func Handlers() *mux.Router {
 
 	r := mux.NewRouter().StrictSlash(true)
@@ -18,13 +17,12 @@ func Handlers() *mux.Router {
 	r.HandleFunc("/register", controllers.AddUser).Methods("POST")
 	r.HandleFunc("/login", controllers.Login).Methods("POST")
 
-	// Auth route
 	s := r.PathPrefix("/api").Subrouter()
 	s.Use(auth.JwtVerify)
-	s.HandleFunc("/user", controllers.FetchUsers).Methods("GET")
-	s.HandleFunc("/user/{id}", controllers.GetUser).Methods("GET")
-	s.HandleFunc("/user/{id}", controllers.UpdateUser).Methods("PUT")
-	s.HandleFunc("/user/{id}", controllers.DeleteUser).Methods("DELETE")
+	s.HandleFunc("/users", controllers.FetchUsers).Methods("GET")
+	s.HandleFunc("/users/{id}", controllers.GetUser).Methods("GET")
+	s.HandleFunc("/users/{id}", controllers.UpdateUser).Methods("PUT")
+	s.HandleFunc("/users/{id}", controllers.DeleteUser).Methods("DELETE")
 
 	s.HandleFunc("/books", controllers.AddBook).Methods("POST")
 	s.HandleFunc("/books", controllers.FetchBooks).Methods("GET")
@@ -35,7 +33,6 @@ func Handlers() *mux.Router {
 	return r
 }
 
-// CommonMiddleware --Set content-type
 func CommonMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")

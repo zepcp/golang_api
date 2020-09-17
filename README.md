@@ -28,10 +28,12 @@ Test It With Python
     requests.post(base_url + "register", json={"email": "test", "password": "test"}).json()
     token = requests.post(base_url + "login", json={"email": "test", "password": "test"}).json()["token"]
 
-    requests.get(base_url + "api/user", headers={"x-access-token": token}).json()
-    requests.get(base_url + "api/user/1", headers={"x-access-token": token}).json()
-    requests.put(base_url + "api/user/1", json={"name": "test"}, headers={"x-access-token": token}).json()
-    requests.delete(base_url + "api/user/1", headers={"x-access-token": token}).json()
+    requests.get(base_url + "api/users", headers={"x-access-token": token}).json()
+    requests.get(base_url + "api/users/1", headers={"x-access-token": token}).json()
+    requests.put(base_url + "api/users/1", json={"name": "test"}, headers={"x-access-token": token}).json()
+    requests.delete(base_url + "api/users/1", headers={"x-access-token": token}).json()
+
+
 
     requests.post(base_url + "api/books", json={"title":"test","author":"test", "isbn": "1234"}, headers={"x-access-token": token}).json()
     requests.get(base_url + "api/books", headers={"x-access-token": token}).json()

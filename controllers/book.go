@@ -11,8 +11,6 @@ import (
 
 func FetchBooks(w http.ResponseWriter, r *http.Request) {
 	var books []models.Book
-	db.Preload("auths").Find(&books)
-
 	json.NewEncoder(w).Encode(books)
 }
 
