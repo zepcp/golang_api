@@ -1,0 +1,375 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Go-Lang API
+  description: Go-Lang API
+  contact:
+    email: email@hostname.com
+host: localhost:8000
+basePath: /v1
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+security:
+  - Bearer: []
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /users:
+    get:
+      summary: FetchUsers
+      description: FetchUsers
+      tags:
+      - users
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+          headers: {}
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      security: []
+      summary: AddUser
+      description: AddUser
+      tags:
+      - users
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        422:
+          description: Unprocessable Entity (Usually when a required field is not there)
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: A user already exists with this username or e-mail
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{id}:
+    get:
+      summary: GetUser by ID
+      description: GetUser by ID
+      tags:
+      - users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      summary: UpdateUser by ID
+      description: UpdateUser by ID
+      tags:
+      - users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/PatchUser'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: DeleteUser by ID
+      description: DeleteUser by ID
+      tags:
+      - users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+  /users/login:
+    post:
+      security: []
+      summary: Login
+      description: Login
+      tags:
+      - users
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+          headers: {}
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+
+  /books:
+    get:
+      summary: FetchBooks
+      description: FetchBooks
+      tags:
+      - books
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+          headers: {}
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      security: []
+      summary: AddBook
+      description: AddBook
+      tags:
+      - books
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Book'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Book'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        422:
+          description: Unprocessable Entity (Usually when a required field is not there)
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: A book already exists with this title and author
+          schema:
+            $ref: '#/definitions/Error'
+  /books/{id}:
+    get:
+      summary: GetBook by ID
+      description: GetBook by ID
+      tags:
+      - books
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Book'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      summary: UpdateBook by ID
+      description: UpdateBook by ID
+      tags:
+      - books
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/PatchBook'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Book'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: User not found
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: DeleteBook by ID
+      description: DeleteBook by ID
+      tags:
+      - books
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Book'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    title: Error
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+  User:
+    title: User
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - email
+      - password
+  PatchUser:
+    title: PatchUser
+    description: Optional fields used for the PATCH method
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  LoginRequest:
+    title: UsersLoginRequest
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - email
+      - password
+  LoginResponse:
+    title: UsersLoginResponse
+    type: object
+    properties:
+      token:
+        type: string
+  Book:
+    title: Book
+    type: object
+    properties:
+      isbn:
+        type: string
+      title:
+        type: string
+      author:
+        type: string
+    required:
+      - isbn
+      - title
+      - author
+  PatchBook:
+    title: PatchBook
+    description: Optional fields used for the PATCH method
+    type: object
+    properties:
+      isbn:
+        type: string
+      title:
+        type: string
+      author:
+        type: string
+tags:
+- name: users
+- name: books

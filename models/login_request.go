@@ -12,29 +12,22 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// User User
+// LoginRequest UsersLoginRequest
 //
-// swagger:model User
-type User struct {
+// swagger:model LoginRequest
+type LoginRequest struct {
 
 	// email
 	// Required: true
 	Email *string `json:"email"`
 
-	// id
-	ID int64 `json:"id,omitempty"`
-
 	// password
 	// Required: true
 	Password *string `json:"password"`
-
-	// username
-	// Required: true
-	Username *string `json:"username"`
 }
 
-// Validate validates this user
-func (m *User) Validate(formats strfmt.Registry) error {
+// Validate validates this login request
+func (m *LoginRequest) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
@@ -45,17 +38,13 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUsername(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
 }
 
-func (m *User) validateEmail(formats strfmt.Registry) error {
+func (m *LoginRequest) validateEmail(formats strfmt.Registry) error {
 
 	if err := validate.Required("email", "body", m.Email); err != nil {
 		return err
@@ -64,7 +53,7 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validatePassword(formats strfmt.Registry) error {
+func (m *LoginRequest) validatePassword(formats strfmt.Registry) error {
 
 	if err := validate.Required("password", "body", m.Password); err != nil {
 		return err
@@ -73,17 +62,8 @@ func (m *User) validatePassword(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateUsername(formats strfmt.Registry) error {
-
-	if err := validate.Required("username", "body", m.Username); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // MarshalBinary interface implementation
-func (m *User) MarshalBinary() ([]byte, error) {
+func (m *LoginRequest) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -91,8 +71,8 @@ func (m *User) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *User) UnmarshalBinary(b []byte) error {
-	var res User
+func (m *LoginRequest) UnmarshalBinary(b []byte) error {
+	var res LoginRequest
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
